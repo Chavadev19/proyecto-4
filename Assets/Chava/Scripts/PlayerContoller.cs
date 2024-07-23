@@ -5,6 +5,7 @@ using UnityEngine;
 public class PlayerContoller : MonoBehaviour
 {
     [SerializeField] private bool hasKey;
+    [SerializeField] private Transform teleport;
 
     private void Start()
     {
@@ -28,6 +29,8 @@ public class PlayerContoller : MonoBehaviour
             Debug.Log("Tocando llave");
         }
 
+      
+
     }
 
     private void OnTriggerEnter(Collider other)
@@ -37,6 +40,12 @@ public class PlayerContoller : MonoBehaviour
             hasKey = true;
             Destroy(other.gameObject);
             Debug.Log("Tocando llave trigger");
+        }
+
+        if(other.gameObject.CompareTag("Teleport"))
+        {
+            Debug.Log("Tocando TP");
+            gameObject.transform.position = new Vector3(teleport.position.x, teleport.position.y, teleport.position.z);
         }
     }
 
