@@ -4,6 +4,9 @@ using UnityEngine;
 
 public class PlayerMovement : MonoBehaviour
 {
+    [SerializeField] private Transform playerModel;
+    [SerializeField] private Animator anim;
+
     [Header("Movement")]
     private float moveSpeed;
     public float walkSpeed;
@@ -60,6 +63,7 @@ public class PlayerMovement : MonoBehaviour
 
     private void Start()
     {
+        anim = playerModel.GetComponent<Animator>();
         rb = GetComponent<Rigidbody>();
         rb.freezeRotation = true;
 
@@ -70,24 +74,42 @@ public class PlayerMovement : MonoBehaviour
 
     private void Update()
     {
-
+        Debug.DrawRay(transform.position, Vector3.down * (playerHeight * 0.5f + 0.2f), Color.red);
         grounded = Physics.Raycast(transform.position, Vector3.down, playerHeight * 0.5f + 0.2f, whatIsGround);
         MyInput();
         SpeedControl();
         StateHandler();
 
+        SyncRotationWithCamera();
+
         //Handle drag
         if (grounded)
+        {
+            Debug.Log("En piso");
             rb.drag = groundDrag;
+        }
         else
             rb.drag = 0;
+
+        float speed = new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude;
+
+        // Actualiza el parámetro de velocidad en el Animator
+        anim.SetFloat("speed", speed);
+
+        anim.SetBool("isGrounded", grounded);
     }
 
     private void FixedUpdate()
     {
         MovePlayer();
     }
-
+    private void SyncRotationWithCamera()
+    {
+        // Asumiendo que la cámara está rotada en el padre del modelo del jugador (e.g., "orientation")
+        Vector3 cameraForward = orientation.forward;
+        cameraForward.y = 0; // Asegúrate de que solo rotamos en el plano XZ
+        playerModel.forward = cameraForward.normalized; // Actualiza la rotación del modelo del jugador
+    }
     private void MyInput()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");

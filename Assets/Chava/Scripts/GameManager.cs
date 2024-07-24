@@ -17,6 +17,7 @@ public class GameManager : MonoBehaviour
     public void Play()
     {
         SceneManager.LoadScene("MainLevel");
+        Time.timeScale = 1;
     }
 
     public void Exit()
@@ -47,10 +48,20 @@ public class GameManager : MonoBehaviour
     public void Retry()
     {
         SceneManager.LoadScene("MainLevel");
+        Time.timeScale = 1;
     }
 
     public void MainMenu()
     {
         SceneManager.LoadScene("MainMenu");
+    }
+
+    public void Victory()
+    {
+        SceneManager.LoadScene("Victory");
+    }
+    public void Defeat ()
+    {
+        SceneManager.LoadScene("Defeat");
     }
 }

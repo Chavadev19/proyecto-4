@@ -6,18 +6,16 @@ public class PlayerContoller : MonoBehaviour
 {
     [SerializeField] private bool hasKey;
     [SerializeField] private Transform teleport;
-
+    [SerializeField] private GameManager _gameManager;
     private void Start()
     {
+        
         hasKey = false;
     }
 
     private void Update()
     {
-        if(hasKey)
-        {
-            openDoor();
-        }
+       
     }
 
     private void OnCollisionEnter(Collision collision)
@@ -47,10 +45,12 @@ public class PlayerContoller : MonoBehaviour
             Debug.Log("Tocando TP");
             gameObject.transform.position = new Vector3(teleport.position.x, teleport.position.y, teleport.position.z);
         }
+
+        if(other.gameObject.CompareTag("Exit") && hasKey)
+        {
+            _gameManager.Victory();
+        }
     }
 
-    private void openDoor()
-    {
-        //Abre la apuerta
-    }
+
 }

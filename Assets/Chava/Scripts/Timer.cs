@@ -11,10 +11,11 @@ public class Timer : MonoBehaviour
     [SerializeField] float currentTime;
     public TextMeshProUGUI currentTimerText;
     public TimeSpan time;
+    [SerializeField] private GameManager _gameManager;
 
     void Start()
     {
-        
+        _gameManager = FindFirstObjectByType<GameManager>();
         stopWatchActive = true;
     }
 
@@ -50,6 +51,6 @@ public class Timer : MonoBehaviour
 
     void OnTimerEnd()
     {
-        Debug.Log("Timer has ended!");
+        _gameManager.Defeat();
     }
 }
