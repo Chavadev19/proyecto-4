@@ -82,7 +82,7 @@ public class PlayerMovement : MonoBehaviour
 
         SyncRotationWithCamera();
 
-        //Handle drag
+        
         if (grounded)
         {
             Debug.Log("En piso");
@@ -93,7 +93,7 @@ public class PlayerMovement : MonoBehaviour
 
         float speed = new Vector3(rb.velocity.x, 0, rb.velocity.z).magnitude;
 
-        // Actualiza el parámetro de velocidad en el Animator
+       
         anim.SetFloat("speed", speed);
 
         anim.SetBool("isGrounded", grounded);
@@ -105,17 +105,17 @@ public class PlayerMovement : MonoBehaviour
     }
     private void SyncRotationWithCamera()
     {
-        // Asumiendo que la cámara está rotada en el padre del modelo del jugador (e.g., "orientation")
+        
         Vector3 cameraForward = orientation.forward;
-        cameraForward.y = 0; // Asegúrate de que solo rotamos en el plano XZ
-        playerModel.forward = cameraForward.normalized; // Actualiza la rotación del modelo del jugador
+        cameraForward.y = 0; 
+        playerModel.forward = cameraForward.normalized; 
     }
     private void MyInput()
     {
         horizontalInput = Input.GetAxisRaw("Horizontal");
         verticalInput = Input.GetAxisRaw("Vertical");
 
-        //When to jump
+        
         if (Input.GetKey(jumpKey) && readyToJump && grounded)
         {
             readyToJump = false;
@@ -125,14 +125,14 @@ public class PlayerMovement : MonoBehaviour
             Invoke(nameof(ResetJump), jumpCooldown);
         }
 
-        // Start crouch
+        
         if (Input.GetKeyDown(crouchKey))
         {
             transform.localScale = new Vector3(transform.localScale.x, crouchYScale, transform.localScale.z);
             rb.AddForce(Vector3.down * 5f, ForceMode.Impulse);
         }
 
-        // Stop crouch
+        
         if (Input.GetKeyUp(crouchKey))
         {
             transform.localScale = new Vector3(transform.localScale.x, startYScale, transform.localScale.z);
@@ -142,7 +142,7 @@ public class PlayerMovement : MonoBehaviour
     private void StateHandler()
     {
 
-        // Mode - Crouching
+        
         if (Input.GetKey(crouchKey))
         {
             Debug.Log("Agachado");
@@ -150,21 +150,21 @@ public class PlayerMovement : MonoBehaviour
             moveSpeed = crouchSpeed;
         }
 
-        //Mode - Sprimting
+        
         else if (grounded && Input.GetKey(sprintKey))
         {
             state = MovementState.sprinting;
             moveSpeed = sprintSpeed;
         }
 
-        // Mode - Walking
+        
         else if (grounded)
         {
             state = MovementState.walking;
             moveSpeed = walkSpeed;
         }
 
-        // Mode - Air
+        
         else
         {
             state = MovementState.air;
@@ -173,10 +173,10 @@ public class PlayerMovement : MonoBehaviour
 
     private void MovePlayer()
     {
-        //Calculate movement direction
+        
         moveDirection = orientation.forward * verticalInput + orientation.right * horizontalInput;
 
-        // on slope
+        
         if (OnSlope() && !exitingSlope)
         {
             rb.AddForce(GetSlopeMoveDirection() * moveSpeed * 20f, ForceMode.Force);
@@ -185,22 +185,22 @@ public class PlayerMovement : MonoBehaviour
                 rb.AddForce(Vector3.down * 80f, ForceMode.Force);
         }
 
-        // on ground
+        
         else if (grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f, ForceMode.Force);
 
-        // in air
+        
         else if (!grounded)
             rb.AddForce(moveDirection.normalized * moveSpeed * 10f * airMultiplier, ForceMode.Force);
 
-        // turn gravity off while slope
+        
         rb.useGravity = !OnSlope();
     }
 
     private void SpeedControl()
     {
 
-        // limiting speed on Slope
+        
         if (OnSlope() && !exitingSlope)
         {
             if (rb.velocity.magnitude > moveSpeed)
@@ -209,7 +209,7 @@ public class PlayerMovement : MonoBehaviour
 
         }
 
-        //limiting speed on ground or in air
+        
         else
         {
             Vector3 flatVel = new Vector3(rb.velocity.x, 0f, rb.velocity.z);

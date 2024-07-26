@@ -7,28 +7,28 @@ using TMPro;
 
 public class Timer : MonoBehaviour
 {
-    bool stopWatchActive = false;
+    bool watchActive = false;
     [SerializeField] float currentTime;
-    public TextMeshProUGUI currentTimerText;
-    public TimeSpan time;
+    [SerializeField] private TextMeshProUGUI currentTimerText;
+    [SerializeField] private TimeSpan time;
     [SerializeField] private GameManager _gameManager;
 
     void Start()
     {
         _gameManager = FindFirstObjectByType<GameManager>();
-        stopWatchActive = true;
+        watchActive = true;
     }
 
     void Update()
     {
-        if (stopWatchActive)
+        if (watchActive)
         {
             currentTime -= Time.deltaTime;
 
             if (currentTime <= 0)
             {
                 currentTime = 0;
-                stopWatchActive = false;
+                watchActive = false;
                 
                 OnTimerEnd();
             }
@@ -39,15 +39,6 @@ public class Timer : MonoBehaviour
         }
     }
 
-    public void StartStopWatch()
-    {
-        stopWatchActive = true;
-    }
-
-    public void StopWatch()
-    {
-        stopWatchActive = false;
-    }
 
     void OnTimerEnd()
     {
